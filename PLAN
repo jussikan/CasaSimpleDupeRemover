@@ -1,3 +1,19 @@
+1. classy solution, with directories hardcoded and default functionality working
+
+2. add DnD
+
+3. make sure whole set works
+
+4. unit and/or component tests ??
+    https://pypi.org/project/macuitest/
+    https://circleci.com/docs/testing-macos/
+    https://developer.apple.com/documentation/xctest/user_interface_tests
+
+
+
+compiling pure python code into bytecode -> py_compile -- done, right ?
+
+
 py_compile
 https://docs.python.org/3/library/py_compile.html
 
