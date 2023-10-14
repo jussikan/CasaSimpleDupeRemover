@@ -2,6 +2,7 @@
 
 import asyncio
 
+from lib.application import Application
 
 def main(async_loop):
     app = Application(async_loop)

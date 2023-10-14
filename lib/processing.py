@@ -5,22 +5,22 @@ from typing import Callable, Coroutine
 
 class Processing:
     # type here may differ per OS.
-    self.async_loop: asyncio.unix_events._UnixSelectorEventLoop = None
-    self.tasks: list = None
-    self.fn: Coroutine = None
-    self.script: str = None
-    self.argv: list = None
-    self.afterProcessing: Coroutine = None
+    async_loop: asyncio.unix_events._UnixSelectorEventLoop = None
+    tasks: list = None
+    fn: Coroutine = None
+    script: str = None
+    argv: list = None
+    afterProcessing: Coroutine = None
 
     def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
         self.async_loop = async_loop
         self.tasks = []
 
-    def setProcessingAction(self, scriptOrFunction: str | Coroutine):
-        if isinstance(scriptOrFunction, 'str'):
+    def setProcessingAction(self, scriptOrFunction: 'str | Coroutine'):
+        if isinstance(scriptOrFunction, str):
             self.script = scriptOrFunction
             self.fn = None
-        elif isinstance(scriptOrFunction, 'Coroutine'):
+        elif isinstance(scriptOrFunction, Coroutine):
             self.script = None
             self.fn = scriptOrFunction
 
@@ -30,8 +30,8 @@ class Processing:
     def setAfterProcessingFunction(self, fn: Coroutine):
         self.afterProcessing = fn
 
-    async def runInShell(script: str) -> int:
-        proc = await asyncio.create_subprocess_shell(' '.join([script, ' '.join(argv)]))
+    async def runInShell(self, script: str) -> int:
+        proc = await asyncio.create_subprocess_shell(' '.join([script, ' '.join(self.argv)]))
         foo = await proc.wait()
         print("type(foo):", type(foo))
         return foo
@@ -57,7 +57,7 @@ class Processing:
             print(cancelledError)
             return
 
-        completed, pending = await asyncio.wait(tasks)
+        completed, pending = await asyncio.wait(self.tasks)
         await self.afterProcessing(completed, pending)
 
     def __asyncio_thread(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
@@ -71,7 +71,6 @@ class Processing:
     #     threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
 
     def execute(self):
-        # self.__do_tasks()
         threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
 
     def clearTasks(self):
@@ -88,7 +87,7 @@ class Processing:
                 except asyncio.exceptions.CancelledError as cancelledError:
                     print("got CancelledError.")
 
-                tasks.remove(task)  # is this wise always here?
+                self.tasks.remove(task)  # is this wise always here?
                 cancelCount = cancelCount + 1
 
         print(f"{cancelCount} tasks cancelled.")

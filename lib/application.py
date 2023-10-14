@@ -1,41 +1,52 @@
 import asyncio
 import os
 from pathlib import Path
+import subprocess
 
-INITIAL_STATUS_LABEL_TEXT="At your service."
+from .phases import Phases
+from .gui import GUI
+from .processing import Processing
+
+INITIAL_STATUS_LABEL_TEXT = "At your service."
 
 
-def __initPhases(app: Application):
+def initPhases(app: 'Application'):
     app.phases = Phases()
     # these, or at least the script/command could be configurable.
-    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "duperecorder.sh")    
+    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "duperecorder.sh"),
+    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "duperecorder.sh"),
+    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "duperecorder.sh")
 
 
 class Application:
-    self.async_loop: asyncio.unix_events._UnixSelectorEventLoop = None
-    self.phases: Phases = None
-    self.gui: GUI = None
+    async_loop: asyncio.unix_events._UnixSelectorEventLoop = None
+    phases: Phases = None
+    gui: GUI = None
     # this for now for the macOS build.
-    self.scriptDirectory: Path = None
+    scriptDirectory: Path = None
     # workDirectory to be configurable, under user's home directory by default
-    self.workDirectory: Path = None
+    workDirectory: Path = None
     # to be set when users drops a directory onto the app window
-    self.scrutinyDirectory: Path = None
+    scrutinyDirectory: Path = None
 
     def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
         self.async_loop = async_loop
         # self.phases = Phases()
         # self.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found")
         # etc
-        __initPhases(self)
+        initPhases(self)
         self.phases.reset()
 
-        app.gui = GUI('Duplicate file remover')
-        app.gui.setStatusLabelText(INITIAL_STATUS_LABEL_TEXT)
-        app.gui.setActionButtonText(self.phases.getCurrent().actionText)
-        app.gui.setActionButtonAction(lambda: self.__onClickAction)
+        self.gui = GUI('Duplicate file remover')
+        self.gui.setStatusLabelText(INITIAL_STATUS_LABEL_TEXT)
+        phase = self.phases.getCurrent()
+        self.gui.setActionButtonText(phase.actionText)
+        self.gui.setActionButtonAction(self.__onClickAction)
 
-        self.scriptDirectory = Path(__file__).parent.joinpath('bin')
+        self.gui.setCancelButtonAction(self.__onClickCancel)
+        self.gui.setCancelButtonState(GUI.state['DISABLED'])
+
+        self.scriptDirectory = Path(__file__).parent.parent.joinpath('bin')
 
         self.workDirectory = Path(os.path.expanduser('~'))
 
@@ -55,7 +66,7 @@ class Application:
     #     threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
 
     # mitä parametrien tyypit on?
-    async def afterPhase(completed, pending):
+    async def afterPhase(self, completed, pending):
         results = [task.result() for task in completed]
         for result in results:
             if type(result) is subprocess.Popen:
@@ -74,9 +85,9 @@ class Application:
         phase = self.phases.getCurrent()
         self.gui.setStatusLabelText(phase.completionText)
         phase = self.phases.advance()
-        self.gui.setActionButtonState(NORMAL)
+        self.gui.setActionButtonState(GUI.state['NORMAL'])
         self.gui.setActionButtonText(phase.actionText)
-        self.gui.setCancelButtonState(DISABLED)
+        self.gui.setCancelButtonState(GUI.state['DISABLED'])
 
     # mihin tätä tarvitaan?
     def __onCancelledAllTasks():
@@ -86,15 +97,16 @@ class Application:
         #   call gui to set label text to previous phase's actionText
         pass
 
-    def __onClickAction():
+    def __onClickAction(self):
         phase = self.phases.getCurrent()
         self.gui.setStatusLabelText(phase.progressText)
-        self.gui.setActionButtonState(DISABLED)
-        self.gui.setCancelButtonState(NORMAL)
-        self.processing.setProcessingAction(Path(self.scriptDirectory, phase.shellScript))
+        self.gui.setActionButtonState(GUI.state['DISABLED'])
+        self.gui.setCancelButtonState(GUI.state['ACTIVE'])
+        self.processing.setProcessingAction(str(Path(self.scriptDirectory, phase.shellScript)))
         self.processing.setProcessingActionArguments([str(self.scrutinyDirectory)])
+        self.processing.execute()
 
-    def __onClickCancel():
+    def __onClickCancel(self):
         self.processing.cancelTasksInProgress()
 
         # voi olla et tätä joutuu säätää
@@ -102,6 +114,8 @@ class Application:
             self.gui.setStatusLabelText(INITIAL_STATUS_LABEL_TEXT)
         else:
             self.gui.setStatusLabelText(self.phases.getCurrent().actionText)
+        self.gui.setCancelButtonState(GUI.state['DISABLED'])
+        self.gui.setActionButtonState(GUI.state['ACTIVE'])
 
-    def run():
+    def run(self):
         self.gui.run()
