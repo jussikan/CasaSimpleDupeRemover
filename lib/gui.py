@@ -1,7 +1,13 @@
+import os
 import tkinter
+from tkinter import ttk
+from tkinterdnd2 import DND_ALL, DND_TEXT, DND_FILES, TkinterDnD
 
 class GUI:
     window: tkinter.Tk = None
+    entryText: tkinter.StringVar = None
+    directoryBox: tkinter.Label = None
+    scroller = ttk.Scrollbar = None
     statusLabel: tkinter.Label = None
     buttonAction: tkinter.Button = None
     buttonCancel: tkinter.Button = None
@@ -15,24 +21,41 @@ class GUI:
         # self.async_loop = async_loop
         #
     def __init__(self, windowTitleText: str):
-        self.window = tkinter.Tk()
+        self.window = TkinterDnD.Tk()
         # title could be configurable at build time
         self.window.title(windowTitleText)
         self.window.geometry('200x300')
         self.window.configure(padx=20, pady=10)
         self.window.grid_columnconfigure(0, weight=1)
 
+        self.entryText = tkinter.StringVar()
+        self.scroller = tkinter.Scrollbar(self.window, orient=tkinter.HORIZONTAL)
+        self.directoryBox = tkinter.Entry(self.window, state='readonly', textvariable=self.entryText, justify=tkinter.CENTER)
+        self.directoryBox.configure(relief="solid", xscrollcommand=self.scroller.set)
+        self.entryText.set("Drop folder here")
+        self.directoryBox.drop_target_register(DND_FILES)
+        self.directoryBox.dnd_bind("<<Drop>>", lambda event: self.onDirectoryDrop(event))
+        self.directoryBox.grid(column=0, row=0, sticky="ew")
+
+        self.scroller.configure(command=self.directoryBox.xview)
         # self.statusLabel = tkinter.Label(self.window, text=initialLabelText)
         self.statusLabel = tkinter.Label(self.window)
-        self.statusLabel.grid(column=0, row=0)
+        self.statusLabel.grid(column=0, row=2)
 
         # self.buttonAction = tkinter.Button(self.window, text=initialActionButtonText)
         self.buttonAction = tkinter.Button(self.window, default=tkinter.ACTIVE, activeforeground='white')
-        self.buttonAction.grid(column=0, row=1, sticky="ew")
+        self.buttonAction.grid(column=0, row=3, sticky="ew")
 
         # text needs to be localizable
         self.buttonCancel = tkinter.Button(self.window, text="Cancel", default=tkinter.NORMAL)
-        self.buttonCancel.grid(column=0, row=2, sticky="ew")
+        self.buttonCancel.grid(column=0, row=4, sticky="ew")
+
+    def onDirectoryDrop(self, event: TkinterDnD.DnDEvent):
+        if len(event.data) > 0:
+            if os.path.isdir(event.data):
+                self.scroller.grid(column=0, row=1, sticky="ew")
+                self.entryText.set(event.data)
+                self.directoryBox.xview("end")
 
     def setStatusLabelText(self, text: str):
         self.statusLabel.configure(text=text)
