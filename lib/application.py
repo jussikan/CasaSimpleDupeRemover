@@ -26,7 +26,7 @@ class Application:
     scriptDirectory: Path = None
     # workDirectory to be configurable, under user's home directory by default
     workDirectory: Path = None
-    # to be set when users drops a directory onto the app window
+    # to be set when user drops a directory onto the app window
     scrutinyDirectory: Path = None
 
     def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
@@ -46,6 +46,8 @@ class Application:
         self.gui.setCancelButtonAction(self.__onClickCancel)
         self.gui.setCancelButtonState(GUI.state['DISABLED'])
 
+        self.gui.setOnGetDirectoryPath(self.setScrutinyDirectory)
+
         self.scriptDirectory = Path(__file__).parent.parent.joinpath('bin')
 
         self.workDirectory = Path(os.path.expanduser('~'))
@@ -53,7 +55,8 @@ class Application:
         self.processing = Processing(self.async_loop)
         self.processing.setAfterProcessingFunction(self.afterPhase)
 
-    # def __initPhases
+    def setScrutinyDirectory(self, path: str):
+        self.scrutinyDirectory = path
 
     # nää async-hommat tuntuu vähän eri vastuulta kuin mitä tällä luokalla on..
     # joten jos lois jonku Processing-luokan niille.

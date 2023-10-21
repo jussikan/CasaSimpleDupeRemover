@@ -22,8 +22,35 @@
 py_compile
 https://docs.python.org/3/library/py_compile.html
 
+
+"Nuitka translates the Python modules into a C level program that then uses libpython and static C files of its own to execute in the same way as CPython does"
 http://nuitka.net/doc/user-manual.html
 
+
+DnD
 https://pythonguides.com/python-tkinter-drag-and-drop/
 
 https://github.com/hseysen/drag_and_drop/blob/master/drag_and_drop.py
+
+
+
+14.-16.10.2023:
+
+tkinterdnd2:
+.drop_target_register(DND_FILES)
+-> _tkinter.TclError: invalid command name "macdnd::registerdragwidget"
+miksi? epäyhteensopiva kirjastobinääri käytössä? asensin brew'stä.
+
+kokeile myös https://pypi.org/project/python-tkdnd/
+    .. eih. sama ongelma ku tkinterdnd2:llä.
+
+pitää googlailla miten (tkinterillä) sais kutsuttua hakemistonvalinta-dialogia.
+tkinter.filedialog vissiin.
+tiiä ny miten tuon drag&dropin ratkaisis.
+jos kokeilis freebsd:ssä et toimiiko siinäkään.
+
+jaha, no nyt ku asens tkinterdnd2-universal pipillä ni dnd-example.py lähti futaa. toimii.
+
+22.10.2023:
+eka DnD-versio toimii, ja näyttää hyvältä.
+sit pitää hoitaa että pudotettu hakemistopolku menee bin/duperecorder.sh:lle asti

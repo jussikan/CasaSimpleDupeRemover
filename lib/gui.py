@@ -1,5 +1,6 @@
 import os
 import tkinter
+import typing
 from tkinter import ttk
 from tkinterdnd2 import DND_ALL, DND_TEXT, DND_FILES, TkinterDnD
 
@@ -11,6 +12,7 @@ class GUI:
     statusLabel: tkinter.Label = None
     buttonAction: tkinter.Button = None
     buttonCancel: tkinter.Button = None
+    onGotDirectoryPath: typing.Callable = None
     state = {
         "ACTIVE": tkinter.ACTIVE,
         "NORMAL": tkinter.NORMAL,
@@ -56,6 +58,11 @@ class GUI:
                 self.scroller.grid(column=0, row=1, sticky="ew")
                 self.entryText.set(event.data)
                 self.directoryBox.xview("end")
+                self.onGotDirectoryPath(self.entryText.get())  # TODO TEST
+
+    # TODO TEST
+    def setOnGetDirectoryPath(self, fn: typing.Callable):
+        self.onGotDirectoryPath = fn
 
     def setStatusLabelText(self, text: str):
         self.statusLabel.configure(text=text)
