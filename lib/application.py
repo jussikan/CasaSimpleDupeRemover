@@ -13,9 +13,9 @@ INITIAL_STATUS_LABEL_TEXT = "At your service."
 def initPhases(app: 'Application'):
     app.phases = Phases()
     # these, or at least the script/command could be configurable.
-    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "duperecorder.sh"),
-    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "duperecorder.sh"),
-    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "duperecorder.sh")
+    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "find-duplicates.sh", "%{scrutinyDirectory}"),
+    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "mark-duplicates.sh"),
+    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "delete-duplicates.sh")
 
 
 class Application:
@@ -105,8 +105,15 @@ class Application:
         self.gui.setStatusLabelText(phase.progressText)
         self.gui.setActionButtonState(GUI.state['DISABLED'])
         self.gui.setCancelButtonState(GUI.state['ACTIVE'])
+
         self.processing.setProcessingAction(str(Path(self.scriptDirectory, phase.shellScript)))
-        self.processing.setProcessingActionArguments([str(self.scrutinyDirectory)])
+
+        if phase.argtpl and len(phase.argtpl) > 0:
+            args = phase.argtpl.replace("%{scrutinyDirectory}", str(self.scrutinyDirectory))
+            self.processing.setProcessingActionArguments([args])
+        else:
+            self.processing.setProcessingActionArguments([])
+
         self.processing.execute()
 
     def __onClickCancel(self):

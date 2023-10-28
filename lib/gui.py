@@ -1,4 +1,5 @@
 import os
+import re
 import tkinter
 import typing
 from tkinter import ttk
@@ -40,6 +41,7 @@ class GUI:
         self.directoryBox.grid(column=0, row=0, sticky="ew")
 
         self.scroller.configure(command=self.directoryBox.xview)
+
         # self.statusLabel = tkinter.Label(self.window, text=initialLabelText)
         self.statusLabel = tkinter.Label(self.window)
         self.statusLabel.grid(column=0, row=2)
@@ -54,9 +56,10 @@ class GUI:
 
     def onDirectoryDrop(self, event: TkinterDnD.DnDEvent):
         if len(event.data) > 0:
-            if os.path.isdir(event.data):
+            path = re.sub(r"}$", "", re.sub(r"^{", "", event.data))
+            if os.path.isdir(path):
                 self.scroller.grid(column=0, row=1, sticky="ew")
-                self.entryText.set(event.data)
+                self.entryText.set(path)
                 self.directoryBox.xview("end")
                 self.onGotDirectoryPath(self.entryText.get())  # TODO TEST
 

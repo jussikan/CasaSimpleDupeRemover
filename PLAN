@@ -1,8 +1,10 @@
-1. classy solution, with directories hardcoded (in Application.py) and default functionality working
+1. classy solution, with directories hardcoded (in Application.py) and default functionality working -- done
 
-2. add DnD
+2. add DnD -- done
 
 3. make sure whole set works
+    * with 3 physically separate shell scripts -- works
+    * with real scripts and real duplicates
 
 4. add possibility to configure
     * workDirectory
