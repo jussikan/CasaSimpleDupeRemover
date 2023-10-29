@@ -10,6 +10,9 @@
     * workDirectory
     * phases
 
+"Duplicates found" will not always be truthful.. -> add check for whether duplicates were found for real, or if none were found.
+    if none found, block the deletion phase.
+
 5. compiling pure python code into bytecode -> py_compile -- done, right ?
 
 6. support pausing & resuming of current process.
@@ -52,6 +55,7 @@ https://python-service.readthedocs.io/en/stable/
 socketteja prosessien väliseen kommunikaatioon
 https://docs.python.org/3.9/howto/sockets.html#socket-howto
 eli GUI & CLI <-> service kommunikaatio
+eiks pipe toimis ? -- mikä ettei ?
 
 
 
