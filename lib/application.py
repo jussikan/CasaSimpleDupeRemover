@@ -2,6 +2,7 @@ import asyncio
 import os
 from pathlib import Path
 import subprocess
+from typing import List
 
 from .phases import Phases
 from .gui import GUI
@@ -29,7 +30,7 @@ class Application:
     # to be set when user drops a directory onto the app window
     scrutinyDirectory: Path = None
 
-    def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
+    def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop, argv: List[str]=[]):
         self.async_loop = async_loop
         # self.phases = Phases()
         # self.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found")
@@ -45,6 +46,10 @@ class Application:
 
         self.gui.setCancelButtonAction(self.__onClickCancel)
         self.gui.setCancelButtonState(GUI.state['DISABLED'])
+
+        if len(argv) > 0 and os.path.isdir(argv[0]):
+            self.setScrutinyDirectory(argv[0])
+            self.gui.setDirectoryBoxText(argv[0])
 
         self.gui.setOnGetDirectoryPath(self.setScrutinyDirectory)
 

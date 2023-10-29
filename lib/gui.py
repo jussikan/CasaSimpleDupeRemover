@@ -54,6 +54,10 @@ class GUI:
         self.buttonCancel = tkinter.Button(self.window, text="Cancel", default=tkinter.NORMAL)
         self.buttonCancel.grid(column=0, row=4, sticky="ew")
 
+    def setDirectoryBoxText(self, path: str):
+        self.entryText.set(path)
+        self.directoryBox.xview("end")
+
     def onDirectoryDrop(self, event: TkinterDnD.DnDEvent):
         if len(event.data) > 0:
             path = re.sub(r"}$", "", re.sub(r"^{", "", event.data))
