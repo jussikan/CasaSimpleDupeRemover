@@ -4,7 +4,7 @@
 
 3. make sure whole set works
     * with 3 physically separate shell scripts -- works
-    * with real scripts and real duplicates
+    * with real scripts and real duplicates -- works
 
 4. add possibility to configure
     * workDirectory
