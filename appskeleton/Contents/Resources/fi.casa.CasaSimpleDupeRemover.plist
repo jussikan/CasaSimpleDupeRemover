@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>baseWorkDirectory</key>
+	<string>${HOME}/.checksums</string>
+	<key>scriptDirectory</key>
+	<string>/Users/jussi/Development/build/CasaSimpleDupeRemover.app/Contents/Resources/bin</string>
+	<!-- <string>/Applications/CasaSimpleDupeRemover.app/Contents/Resources/bin</string> -->
+</dict>
+</plist>

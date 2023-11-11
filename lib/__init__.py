@@ -1,1 +1,1 @@
-__all__ = ['application', 'gui', 'phases', 'processing']
+__all__ = ['application', 'configuration', 'gui', 'phases', 'processing']

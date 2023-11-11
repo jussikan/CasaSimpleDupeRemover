@@ -11,7 +11,9 @@ SUMFILEPATH="${SUMPATH}/${SUMFILE}"
 # TODO tähän pvm+aika sekunnin tarkkuudella, alkamisaika
 #THIS_RUN_SUMFILE="${}"
 
-find "$DIR" -type f -not -name '.DS_Store' > "${SUMPATH}/files_unsorted.txt"
+mkdir -p "$SUMPATH" 2>/dev/null
+
+find "$SCRUTINYDIR" -type f -not -name '.DS_Store' > "${SUMPATH}/files_unsorted.txt"
 sort "${SUMPATH}/files_unsorted.txt" > "${SUMPATH}/files_sorted.txt"
 
 while read filepath; do

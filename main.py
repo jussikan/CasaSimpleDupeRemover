@@ -1,14 +1,17 @@
 #!/usr/bin/env python3.9
+# TODO use just 'python3'.
 
 import asyncio
+from pathlib import Path
 import sys
 
-from lib.application import Application
+sys.path.insert(0, 'lib')
 
+from application import Application
 argv = sys.argv[1:]
 
 def main(async_loop, argv):
-    app = Application(async_loop, argv)
+    app = Application(async_loop, Path(__file__).parent, argv)
     app.run()
 
 

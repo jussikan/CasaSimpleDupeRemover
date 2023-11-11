@@ -17,17 +17,19 @@
     if none found, block the deletion phase.
 
 
-5. compiling pure python code into bytecode -> py_compile -- done, right ?
+5. inject all dependencies to all classes
 
-6. support pausing & resuming of current process.
+6. compiling pure python code into bytecode -> py_compile -- done, right ?
 
-7. unit and/or component tests ??
+7. support pausing & resuming of current process.
+
+8. unit and/or component tests ??
     https://pypi.org/project/macuitest/
     https://circleci.com/docs/testing-macos/
     https://developer.apple.com/documentation/xctest/user_interface_tests
 
 
-8. design app that
+9. design app that
     * has constant (and lazy) PostgreSQL connection
         -> no more shell scripts so performance will be optimal instead of poor
     * supports finding duplicates in 1+ directories
