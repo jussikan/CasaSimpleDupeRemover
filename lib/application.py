@@ -14,9 +14,9 @@ INITIAL_STATUS_LABEL_TEXT = "At your service."
 def initPhases(app: 'Application'):
     app.phases = Phases()
     # these, or at least the script/command could be configurable.
-    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "find-duplicates.sh", "%{scrutinyDirectory}"),
-    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "mark-duplicates.sh"),
-    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "delete-duplicates.sh")
+    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "find-duplicates.sh", "%{workDirectory}", "%{scrutinyDirectory}"),
+    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "mark-duplicates.sh", "%{workDirectory}"),
+    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "delete-duplicates.sh", "%{workDirectory}")
 
 
 class Application:
@@ -55,7 +55,7 @@ class Application:
 
         self.scriptDirectory = Path(__file__).parent.parent.joinpath('bin')
 
-        self.workDirectory = Path(os.path.expanduser('~'))
+        self.workDirectory = Path(os.path.expanduser('~')).joinpath('checksums')
 
         self.processing = Processing(self.async_loop)
         self.processing.setAfterProcessingFunction(self.afterPhase)

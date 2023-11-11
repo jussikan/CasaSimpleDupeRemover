@@ -9,9 +9,13 @@
 4. add possibility to configure
     * workDirectory
     * phases
+        - having this configurable means app would need to rename possible previous workDirectory, or clean it up.
+        - or, have ~/.checksums as baseWorkDirectory, and inside create directories according to pattern checksums-<datetime>, where datetime is the moment the "Find duplicates" button was clicked.
 
-"Duplicates found" will not always be truthful.. -> add check for whether duplicates were found for real, or if none were found.
+
+"Duplicates found" does not appear by a condition thus will not always be truthful.. -> add check for whether duplicates were found for real, or if none were found.
     if none found, block the deletion phase.
+
 
 5. compiling pure python code into bytecode -> py_compile -- done, right ?
 

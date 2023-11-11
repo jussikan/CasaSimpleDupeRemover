@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-SUMPATH="${HOME}/.checksums"
+# can be e.g. ${HOME}/.checksums/checksums-231111T1850
+WORKDIR="$1"
+
+SUMPATH="$WORKDIR"
 SUMFILE="checksums"
 SUMFILEPATH="${SUMPATH}/${SUMFILE}"
 

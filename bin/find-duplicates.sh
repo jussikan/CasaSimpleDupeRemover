@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-DIR="$1"
+# can be e.g. ${HOME}/.checksums/checksums-231111T1850
+WORKDIR="$1"
+SCRUTINYDIR="$2"
 
-SUMPATH="${HOME}/.checksums"
+SUMPATH="$WORKDIR"
 SUMFILE="checksums"
 SUMFILEPATH="${SUMPATH}/${SUMFILE}"
 
