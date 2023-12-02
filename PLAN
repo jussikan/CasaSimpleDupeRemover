@@ -6,30 +6,31 @@
     * with 3 physically separate shell scripts -- works
     * with real scripts and real duplicates -- works
 
-4. add possibility to configure
+4. add possibility to configure -- done, works
     * workDirectory
     * phases
         - having this configurable means app would need to rename possible previous workDirectory, or clean it up.
         - or, have ~/.checksums as baseWorkDirectory, and inside create directories according to pattern checksums-<datetime>, where datetime is the moment the "Find duplicates" button was clicked.
 
+    do testing! -- done.
+
 
 "Duplicates found" does not appear by a condition thus will not always be truthful.. -> add check for whether duplicates were found for real, or if none were found.
     if none found, block the deletion phase.
+    -- nah decided to do some renaming
 
 
 5. inject all dependencies to all classes
 
 6. compiling pure python code into bytecode -> py_compile -- done, right ?
 
-7. support pausing & resuming of current process.
-
-8. unit and/or component tests ??
+7. component tests, then unit tests
     https://pypi.org/project/macuitest/
     https://circleci.com/docs/testing-macos/
     https://developer.apple.com/documentation/xctest/user_interface_tests
 
 
-9. design app that
+8. design app that
     * has constant (and lazy) PostgreSQL connection
         -> no more shell scripts so performance will be optimal instead of poor
     * supports finding duplicates in 1+ directories
@@ -39,6 +40,9 @@
     ! should have listing of the duplicate files before deleting any, in order to avoid automatically deleting something that should not be deleted.
         + could mark files as protected
     ! should have option to go scan (or show) only files of certain file size.
+
+9. support pausing & resuming of current process.
+
 
 
 py_compile

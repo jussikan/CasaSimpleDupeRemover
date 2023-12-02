@@ -19,9 +19,9 @@ PREFERENCE_LIST_FILENAME = 'fi.casa.CasaSimpleDupeRemover.plist'
 def initPhases(app: 'Application'):
     app.phases = Phases()
     # these, or at least the script/command could be configurable.
-    app.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found", "find-duplicates.sh", "%{workDirectory} %{scrutinyDirectory}"),
-    app.phases.createPhase("Mark duplicates", "Marking duplicates", "Duplicates marked", "mark-duplicates.sh", "%{workDirectory}"),
-    app.phases.createPhase("Delete duplicates", "Deleting duplicates", "Duplicates deleted", "delete-duplicates.sh", "%{workDirectory}")
+    app.phases.createPhase("Scan for duplicates", "Scanning ..", "Scanning done", "find-duplicates.sh", "%{workDirectory} %{scrutinyDirectory}"),
+    app.phases.createPhase("Mark duplicates", "Marking ..", "Marking done", "mark-duplicates.sh", "%{workDirectory}"),
+    app.phases.createPhase("Delete duplicates", "Deleting ..", "Deletion done", "delete-duplicates.sh", "%{workDirectory}")
 
 
 def getUserPreferencesPath() -> Path:

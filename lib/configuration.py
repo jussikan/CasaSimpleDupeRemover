@@ -22,7 +22,7 @@ class Configuration:
             pl = plistlib.load(fp, fmt=plistlib.FMT_XML)
 
         conf = Configuration()
-        conf.scriptDirectory = Path(pl['scriptDirectory'])
+        conf._scriptDirectory = Path(pl['scriptDirectory'])
         conf._baseWorkDirectory = Path(pl['baseWorkDirectory'])
 
         return conf
