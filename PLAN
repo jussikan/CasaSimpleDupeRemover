@@ -20,9 +20,9 @@
     -- nah decided to do some renaming
 
 
-5. inject all dependencies to all classes
+5. compiling pure python code into bytecode -> py_compile -- done
 
-6. compiling pure python code into bytecode -> py_compile -- done, right ?
+6. inject all dependencies to all classes
 
 7. component tests, then unit tests
     https://pypi.org/project/macuitest/
