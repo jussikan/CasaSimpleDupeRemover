@@ -7,10 +7,10 @@ import subprocess
 from typing import List
 
 
-from phases import Phases
-from gui import GUI
-from processing import Processing
-from configuration import Configuration
+from lib.phases import Phases
+from lib.gui import GUI
+from lib.processing import Processing
+from lib.configuration import Configuration
 
 INITIAL_STATUS_LABEL_TEXT = "At your service."
 PREFERENCE_LIST_FILENAME = 'fi.casa.CasaSimpleDupeRemover.plist'

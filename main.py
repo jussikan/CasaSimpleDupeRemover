@@ -5,9 +5,9 @@ import asyncio
 from pathlib import Path
 import sys
 
-sys.path.insert(0, 'lib')
+sys.path.insert(0, Path(__file__).parent)
 
-from application import Application
+from lib.application import Application
 argv = sys.argv[1:]
 
 def main(async_loop, argv):

@@ -1,7 +1,7 @@
 from pathlib import Path
 import plistlib
 
-from phases import Phases
+from lib.phases import Phases
 
 class Configuration:
     _scriptDirectory: Path = None
