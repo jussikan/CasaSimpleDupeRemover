@@ -17,8 +17,8 @@ cp bin/{find-duplicates.sh,mark-duplicates.sh,delete-duplicates.sh} "build/${APP
 cp start.command "build/${APP_NAME}.app/Contents/MacOS/start"
 
 find "build/${APP_NAME}.app" -type f -name '.DS_Store' -delete
-rm casadist.zip casainstaller.zip
+rm "${APP_NAME}.zip" "${APP_NAME}_installer.zip"
 cd build
-zip -r -9 ../casadist.zip "${APP_NAME}.app"
+zip -r -9 ../${APP_NAME}.zip "${APP_NAME}.app"
 cd -
-zip -r -9 casainstaller.zip casadist.zip install.command
+zip -r -9 "${APP_NAME}_installer.zip" "${APP_NAME}.zip" install.command

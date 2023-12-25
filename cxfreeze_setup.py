@@ -3,8 +3,8 @@ from os.path import join
 from cx_Freeze import setup, Executable
 
 files = list(map(
-    lambda e: join('lib', e),
-    next(walk('./lib'), ([], None, []))[2]
+    lambda e: join('lib/__pycache__', e),
+    next(walk('./lib/__pycache__'), ([], None, []))[2]
 ))
 files += ['main.py']
 
