@@ -47,15 +47,16 @@ function removeTagOfLatestDuplicate() {
     if [ $(wc -l "${SUMPATH}/tmp_with_timestamps_unsorted.txt" | awk '{print $1}') -gt 1 ]; then
         sort -n -k 1 "${SUMPATH}/tmp_with_timestamps_unsorted.txt" > "${SUMPATH}/tmp_with_timestamps_sorted.txt"
 
-        uniqueTimestampCount="$( awk '{print $1}' "${SUMPATH}/tmp_with_timestamps_sorted.txt" | uniq | wc -l )"
+        uniqueTimestampCount="$( awk '{print $1}' "${SUMPATH}/tmp_with_timestamps_sorted.txt" | uniq | wc -l | awk '{print $1}')"
         if [ $uniqueTimestampCount -eq 1 ]; then
             # järjestä filut koko polun mukaan. ois hienoo jos vois vaik tietyn ylähakemiston lasten luontiaikojen mukaan järjestää mutmut..
             # sit pitäs tietää että miks just se ylähakemisto. tarvis siis yleispätevän ratkaisun.
             awk '{for (i=2; i<NF; i++) printf $i " "; print $NF}' "${SUMPATH}/tmp_with_timestamps_sorted.txt" | sort > "${SUMPATH}/tmp_paths_only_sorted.txt"
             # poista tagi sitten tiedostossa ensimmäisenä mainitulta tiedostolta.
             fileToRemoveTagOff="$(head -1 "${SUMPATH}/tmp_paths_only_sorted.txt")"
-            # echo "$fileToRemoveTagOff" > "${SUMPATH}/tmp_remove_tag_of.txt"
-            # echo "unique timestamp on file($fileToRemoveTagOff), will remove tag."
+            echo "$fileToRemoveTagOff" > "${SUMPATH}/tmp_remove_tag_of.txt"
+
+            echo "unique timestamp on file($fileToRemoveTagOff), will remove tag." >> tagging.log
             # poista tagi sitten viimeiseltä.
             # tail -1 "${SUMPATH}/tmp_paths_only_sorted.txt" > "${SUMPATH}/tmp_remove_tag_of.txt"
             # HUOM tää on aika spesifi eli räätälöity ratkaisu. ei tule olemaan tällaisena tietokantavariantissa.
@@ -73,10 +74,12 @@ function removeTagOfLatestDuplicate() {
             i=1
             while read -u 12 timestamp __path; do
                 if [ -z "$timestamp" ]; then
+                    echo "timestamp for '$path' is empty -> skipping this line" >> log
                     continue
                 fi
                 if [ $i -eq $rowCount ]; then
                     # echo "skipping last (?) row: $timestamp $__path"
+                    echo "index reached rowCount $rowCount, path $path" >> log
                     continue
                 fi
 
@@ -85,9 +88,9 @@ function removeTagOfLatestDuplicate() {
                     exit 67
                 fi
                 # echo "Removing tag off file '$path'" >> tagging.log
-                # echo "Would remove tag off file '$__path'" >> tagging.log
+                echo "Will remove tag off file '$__path'" >> tagging.log
                 tag -r "$tag" "$__path"
-                # echo "$__path" >> "${SUMPATH}/tmp_remove_tag_of.txt"
+                echo "$__path" >> "${SUMPATH}/tmp_remove_tag_of.txt"
 
                 ((i++))
 
