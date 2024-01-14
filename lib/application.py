@@ -73,7 +73,7 @@ class Application:
         # self.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found")
         # etc
 
-        self.home = home
+        self.home = Path(home)
         self.config = loadConfig(self.home)
 
         initPhases(self)

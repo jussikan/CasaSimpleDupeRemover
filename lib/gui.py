@@ -20,9 +20,6 @@ class GUI:
         "DISABLED": tkinter.DISABLED
     }
 
-    # def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop):
-        # self.async_loop = async_loop
-        #
     def __init__(self, windowTitleText: str):
         self.window = TkinterDnD.Tk()
         # title could be configurable at build time
