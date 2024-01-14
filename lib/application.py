@@ -50,6 +50,7 @@ def formWorkDirectoryName() -> str:
     return f"checksums-{dt}"
 
 
+# COULDDO: move all business logic into a new class
 class Application:
     async_loop: asyncio.unix_events._UnixSelectorEventLoop = None
     phases: Phases = None
@@ -69,9 +70,6 @@ class Application:
 
     def __init__(self, async_loop: asyncio.unix_events._UnixSelectorEventLoop, home, argv: List[str]=[]):
         self.async_loop = async_loop
-        # self.phases = Phases()
-        # self.phases.createPhase("Find duplicates", "Finding duplicates", "Duplicates found")
-        # etc
 
         self.home = Path(home)
         self.config = loadConfig(self.home)
@@ -96,7 +94,6 @@ class Application:
         self.gui.setOnGetDirectoryPath(self.setScrutinyDirectory)
 
 
-
         self.processing = Processing(self.async_loop)
         self.processing.setAfterProcessingFunction(self.afterPhase)
 
@@ -106,31 +103,16 @@ class Application:
     def setWorkDirectory(self, path: str):
         self.workDirectory = path
 
-    # nää async-hommat tuntuu vähän eri vastuulta kuin mitä tällä luokalla on..
-    # joten jos lois jonku Processing-luokan niille.
-    # def __asyncio_thread(async_loop: asyncio.unix_events._UnixSelectorEventLoop):
-    #     mockPr = executeMockProcess()
-    #     print("type(mockPr):", type(mockPr))
-    #     async_loop.run_until_complete(mockPr)
-
-    # def __do_tasks():
-    #     threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
-
-    # mitä parametrien tyypit on?
+    # TODO add parameter types
     async def afterPhase(self, completed, pending):
         results = [task.result() for task in completed]
         for result in results:
             if type(result) is subprocess.Popen:
-                print("derp 1")
-                print(result.poll())
+                pass
             elif type(result) is asyncio.subprocess.Process:
-                print("derp 2")
                 await result.wait()
-                print("rc from task:", result.returncode)
             else:
-                print("derp 3")
-                print("result from task:", result)
-                print(type(result))
+                pass
 
         self.processing.clearTasks()
         phase = self.phases.getCurrent()
@@ -139,14 +121,6 @@ class Application:
         self.gui.setActionButtonState(GUI.state['NORMAL'])
         self.gui.setActionButtonText(phase.actionText)
         self.gui.setCancelButtonState(GUI.state['DISABLED'])
-
-    # mihin tätä tarvitaan?
-    def __onCancelledAllTasks():
-        # if self.phases.isAtFirstPhase():
-        #   call gui to set label text to INITIAL_STATUS_LABEL_TEXT
-        # else
-        #   call gui to set label text to previous phase's actionText
-        pass
 
     def __onClickAction(self):
         if self.phases.isAtFirstPhase():
@@ -173,7 +147,6 @@ class Application:
     def __onClickCancel(self):
         self.processing.cancelTasksInProgress()
 
-        # voi olla et tätä joutuu säätää
         if self.phases.isAtFirstPhase():
             self.gui.setStatusLabelText(INITIAL_STATUS_LABEL_TEXT)
         else:
@@ -183,3 +156,6 @@ class Application:
 
     def run(self):
         self.gui.run()
+
+    def _quit(self):
+        self.gui.quit()

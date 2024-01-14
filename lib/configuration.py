@@ -17,7 +17,6 @@ class Configuration:
     def loadFromFile(filePath: str) -> 'Configuration':
         pl = None
 
-        print(filePath)
         with open(filePath, 'rb') as fp:
             pl = plistlib.load(fp, fmt=plistlib.FMT_XML)
 

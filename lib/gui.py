@@ -74,10 +74,8 @@ class GUI:
     def setActionButtonState(self, state: str):
         self.buttonAction.configure(state=state)
 
-    # mikä on fn:n tyyppi kun annetaan lambda, ja mikä kun annetaan funktio?
     def setActionButtonAction(self, fn):
         self.buttonAction.configure(command=fn)
-        # self.window.bind('<Return>', lambda: fn)
 
     def setActionButtonText(self, text: str):
         self.buttonAction.configure(text=text)

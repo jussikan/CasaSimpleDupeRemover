@@ -1,6 +1,6 @@
 import asyncio
 import threading
-from typing import Callable, Coroutine
+from typing import Coroutine
 
 
 class Processing:
@@ -32,9 +32,7 @@ class Processing:
 
     async def runInShell(self, script: str) -> int:
         proc = await asyncio.create_subprocess_shell(' '.join([script, ' '.join(self.argv)]))
-        foo = await proc.wait()
-        print("type(foo):", type(foo))
-        return foo
+        return await proc.wait()
 
     # oli: async def initSubprocess
     async def executeProcessingFunction(self, returnAsap: bool):
@@ -64,11 +62,7 @@ class Processing:
         mockPr = self.initProcessing()
         if mockPr is None:
             return
-        print("type(mockPr):", type(mockPr))
         async_loop.run_until_complete(mockPr)
-
-    # def __do_tasks(self):
-    #     threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
 
     def execute(self):
         threading.Thread(target=self.__asyncio_thread, args=(self.async_loop,)).start()
@@ -83,7 +77,6 @@ class Processing:
             if not task.done():
                 try:
                     rv = task.cancel()
-                    print("rv after task cancel:", rv)
                 except asyncio.exceptions.CancelledError as cancelledError:
                     print("got CancelledError.")
 

@@ -49,18 +49,6 @@ class Phases:
         if self.current is None:
             return
 
-        # if self.current >= 0:
-        #     if self.current == len(self.collection) - 1:
-        #         raise CanNotAdvanceError()
-        #     else:
-        #         self.current = self.current + 1
-
-        # phase = self.getCurrent()
-        # if (self.current + 1 <= len(self.collection)):
-        #     self.current = self.current + 1
-        # else:
-        #     self.current = 0
-
         if (self.current + 1 < len(self.collection)):
             self.current = self.current + 1
         else:
